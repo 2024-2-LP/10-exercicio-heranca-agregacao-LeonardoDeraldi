@@ -76,16 +76,16 @@ public class Consultoria {
 
     public Double getTotalSalarios(){
         Double totalSalario = 0.0;
-        for (int i = 0; i < desenvolvedores.size(); i++) {
-            totalSalario+=desenvolvedores.get(i).calcularSalario();
+        for (Desenvolvedor desenvolvedor : desenvolvedores) {
+            totalSalario += desenvolvedor.calcularSalario();
         }
         return totalSalario;
     }
 
     public Integer qtdDesenvolvedoresMobile(){
         Integer qtdMobile = 0;
-        for (int i = 0; i < desenvolvedores.size(); i++) {
-            if (desenvolvedores.get(i) instanceof DesenvolvedorMobile ){
+        for (Desenvolvedor desenvolvedor : desenvolvedores) {
+            if (desenvolvedor instanceof DesenvolvedorMobile) {
                 qtdMobile++;
             }
         }
@@ -95,9 +95,9 @@ public class Consultoria {
     public List<Desenvolvedor> buscarPorSalarioMaiorIgualQue(Double salario){
         List<Desenvolvedor> salarioMaior = new ArrayList<>();
 
-        for (int i = 0; i < desenvolvedores.size(); i++) {
-            if (desenvolvedores.get(i).calcularSalario() >= salario){
-                salarioMaior.add(desenvolvedores.get(i));
+        for (Desenvolvedor desenvolvedor : desenvolvedores) {
+            if (desenvolvedor.calcularSalario() >= salario) {
+                salarioMaior.add(desenvolvedor);
             }
         }
         return salarioMaior;
@@ -109,12 +109,39 @@ public class Consultoria {
         }
         Double menorSalario = desenvolvedores.get(0).calcularSalario();
         Desenvolvedor desenvolvedorMenor = desenvolvedores.get(0);
-        for (int i = 0; i < desenvolvedores.size(); i++) {
-            if (desenvolvedores.get(i).calcularSalario() < menorSalario){
-                menorSalario = desenvolvedores.get(i).calcularSalario();
-                desenvolvedorMenor = desenvolvedores.get(i);
+        for (Desenvolvedor desenvolvedor : desenvolvedores) {
+            if (desenvolvedor.calcularSalario() < menorSalario) {
+                menorSalario = desenvolvedor.calcularSalario();
+                desenvolvedorMenor = desenvolvedor;
             }
         }
         return desenvolvedorMenor;
+    }
+
+    public List<Desenvolvedor> buscarPorTecnologia(String tecnologia) {
+        List<Desenvolvedor> dev = new ArrayList<>();
+
+        for (Desenvolvedor desenvolvedorDaVez : desenvolvedores) {
+            if(desenvolvedorDaVez instanceof DesenvolvedorMobile){
+                if(((DesenvolvedorMobile) desenvolvedorDaVez).getPlataforma().equals(tecnologia) || ((DesenvolvedorMobile) desenvolvedorDaVez).getLinguagem().equals(tecnologia)){
+                    dev.add(desenvolvedorDaVez);
+                }
+            }
+            if(desenvolvedorDaVez instanceof DesenvolvedorWeb){
+                if(((DesenvolvedorWeb) desenvolvedorDaVez).getBackend().equals(tecnologia)|| ((DesenvolvedorWeb) desenvolvedorDaVez).getFrontend().equals(tecnologia) || ((DesenvolvedorWeb) desenvolvedorDaVez).getSgbd().equals(tecnologia)){
+                    dev.add(desenvolvedorDaVez);
+                }
+            }
+        }
+        return dev;
+    }
+
+    public Double getTotalSalariosPorTecnologia(String tecnologia) {
+        List<Desenvolvedor> retornar = buscarPorTecnologia(tecnologia);
+        Double contador = 0.0;
+        for (Desenvolvedor desenvolvedor : retornar) {
+            contador+= desenvolvedor.calcularSalario();
+        }
+        return contador;
     }
 }
